@@ -12,9 +12,9 @@ Kết quả: `out/<slug>.mp4` (1080×1920, 30fps, có giọng + nhạc + SFX) + 
 
 1. Lấy engine (dùng chung cho mọi bản 30s/45s/60s/giọng nữ):
    ```bash
-   [ -d engine ] || { git clone -q --depth 1 https://github.com/__REPO__.git _vt && mv _vt/engine engine && rm -rf _vt; }
+   [ -d engine ] || { git clone -q --depth 1 https://github.com/truyenng/skill-video-tin-tuc-engine.git _vt && mv _vt/engine engine && rm -rf _vt; }
    ```
-   Clone báo 403/404 (repo private chưa gắn vào phiên) → gọi tool `add_repo` với owner/repo `__REPO__` rồi clone lại. Không đọc code engine trừ khi cần sửa hiệu ứng/layout.
+   Clone báo 403/404 (repo private chưa gắn vào phiên) → gọi tool `add_repo` với owner/repo `truyenng/skill-video-tin-tuc-engine` rồi clone lại. Không đọc code engine trừ khi cần sửa hiệu ứng/layout.
 2. Remotion: `cd engine/remotion && NO_PROXY= no_proxy= npm install --no-audit --no-fund --noproxy=localhost`
    (npm/pip phải đi QUA proxy: biến NO_PROXY mặc định chứa registry.npmjs.org/pypi.org nên đi thẳng sẽ bị 403.)
    Chromium: tự dò `/opt/pw-browsers/chromium_headless_shell-*/chrome-linux/headless_shell`; khác thì đặt `REMOTION_CHROME`.
