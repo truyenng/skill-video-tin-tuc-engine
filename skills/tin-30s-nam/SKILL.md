@@ -1,5 +1,5 @@
 ---
-name: "video-tin-tuc-remotion"
+name: "tin-30s-nam"
 description: "Làm video tin tức tổng hợp dọc 9:16 bằng Remotion từ link bài báo: tự tải bài + ảnh, giọng đọc VieNeu-TTS, hiệu ứng động mạnh (chuyển cảnh, chữ động, số đếm, biểu đồ, VS), phụ đề karaoke, SFX, MP4. Dùng khi cần hiệu ứng phức tạp hoặc làm nhiều video."
 ---
 

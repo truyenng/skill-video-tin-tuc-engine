@@ -1,5 +1,5 @@
 ---
-name: "video-tin-tuc-remotion-60s"
+name: "tin-60s-nam"
 description: "Làm video tin tức tổng hợp dọc 9:16 dài 60 giây bằng Remotion từ link bài báo (giọng VieNeu, hiệu ứng động, phụ đề karaoke, SFX). Dùng khi cần video 60s hoặc tin phân tích cần đủ bối cảnh."
 ---
 

@@ -1,11 +1,9 @@
 ---
-name: "video-tintuc-45s-nu"
-description: "Làm video tin tức tổng hợp dọc 9:16 dài 45 giây bằng Remotion từ link bài báo, GIỌNG NỮ miền Bắc (VieNeu), nền tím than, phụ đề karaoke vàng, hiệu ứng động, SFX. Dùng khi cần video tin 45s giọng nữ (/video-tintuc-45s-nu)."
+name: "tin-45s-nam"
+description: "Làm video tin tức tổng hợp dọc 9:16 dài 45 giây bằng Remotion từ link bài báo (giọng VieNeu, hiệu ứng động, phụ đề karaoke, SFX). Dùng khi cần video 45s hoặc tin dài hơn bản 30s."
 ---
 
-# Video tin tức 9:16 bằng Remotion — bản 45 giây, giọng nữ
-
-**Khác bản `video-tin-tuc-remotion-45s` đúng 4 điểm**: màu nhấn (accent: chữ `**nhấn mạnh**`, số, eyebrow, cột nổi bật, thanh tiến trình) xanh lá `#4ade80` thay cam; giọng mặc định là giọng NỮ miền Bắc (`Ngọc Huyền`), nền video tím than (thay xanh navy) — bật bằng `"theme": "purple"` trong brief, chữ karaoke đang đọc màu vàng `#facc15` (thay màu accent cam). Bố cục, hiệu ứng, quy trình, độ dài giữ nguyên.
+# Video tin tức 9:16 bằng Remotion — bản 45 giây
 
 Bản dài 45s của skill `video-tin-tuc-remotion` (bản 30s), dùng cho tin cần nội dung dài hơn bản 30s (nhiều số liệu, 2 bên liên quan). Engine, giọng, hiệu ứng, nhạc, SFX giữ nguyên như bản 30s; chỉ khác độ dài và cách viết kịch bản. Bản khác: `video-tin-tuc-remotion` (30s), `video-tin-tuc-remotion-60s`, bản nhẹ `video-doc-tu-link`. Cùng định dạng `brief.json` / `scenes.json`.
 Kết quả: `out/<slug>.mp4` (1080×1920, 30fps, có giọng + nhạc + SFX) + `.srt` + `.txt`. Video **45–50 giây** (`duration_range: [45, 50]` — luôn ghi trong brief); ≈ 4 phút render (2 CPU).
@@ -31,7 +29,7 @@ Kết quả: `out/<slug>.mp4` (1080×1920, 30fps, có giọng + nhạc + SFX) + 
 
 1. **Tải bài gốc**: `python3 engine/fetch_article.py "<url>" <slug>` → `<slug>/source.md` (toàn văn), `media/article-N.jpg` (ảnh trong bài, bỏ thumbnail), video mp4/m3u8 nếu có, `media/credits.json`. Xem ảnh bằng Read để chọn ảnh đúng nội dung (loại ảnh lạc đề hoặc gây hiểu sai).
    **Luôn viết kịch bản từ `source.md` toàn văn**, không từ bản tóm tắt WebFetch — tóm tắt từng làm sai nghĩa (giá sau ưu đãi bị ghi thành giá niêm yết).
-2. **Kịch bản để người dùng DUYỆT trước khi render** — bảng # | Lời đọc | Hình. **Video 45–50s, không tăng tốc giọng: 6–7 cảnh, mỗi cảnh 1–2 câu ngắn (1 ý/cảnh); tổng lời đọc (tính cả phần `pronounce` đọc thay, vd "TP HCM" = 6 âm tiết): **giọng Ngọc Huyền ~205–235 âm tiết** (nếu đổi giọng: Mai Anh ~185–210, Trúc Ly ~230–260) — `--check` tính đúng theo giọng**. Cách làm: liệt kê mọi ý/số trong bài → chọn 5–6 ý đắt nhất → mỗi ý 1 cảnh, bỏ từ đệm ("hiện nay", "đáng chú ý là"…), gộp số vào câu. Thời lượng dài hơn để **thêm ý và bối cảnh**, không kéo dài câu hay lặp lại. Mạch: Hook có con số trong 2 giây đầu → bối cảnh/vì sao đáng chú ý → số liệu chính → chi tiết 1 → chi tiết 2 / so sánh → tác động, ai bị ảnh hưởng → kết luận. Bài gốc không đủ ý cho 45s → báo người dùng và đề xuất dùng bản ngắn hơn, không độn chữ/bịa thêm.
+2. **Kịch bản để người dùng DUYỆT trước khi render** — bảng # | Lời đọc | Hình. **Video 45–50s, không tăng tốc giọng: 6–7 cảnh, mỗi cảnh 1–2 câu ngắn (1 ý/cảnh); tổng lời đọc (tính cả phần `pronounce` đọc thay, vd "TP HCM" = 6 âm tiết): **giọng Hải Đăng ~225–255 âm tiết**, Minh Đức ~170–195 — `--check` tính đúng theo giọng**. Cách làm: liệt kê mọi ý/số trong bài → chọn 5–6 ý đắt nhất → mỗi ý 1 cảnh, bỏ từ đệm ("hiện nay", "đáng chú ý là"…), gộp số vào câu. Thời lượng dài hơn để **thêm ý và bối cảnh**, không kéo dài câu hay lặp lại. Mạch: Hook có con số trong 2 giây đầu → bối cảnh/vì sao đáng chú ý → số liệu chính → chi tiết 1 → chi tiết 2 / so sánh → tác động, ai bị ảnh hưởng → kết luận. Bài gốc không đủ ý cho 45s → báo người dùng và đề xuất dùng bản ngắn hơn, không độn chữ/bịa thêm.
    - Đổi kiểu cảnh liên tục (không 2 cảnh liền cùng `type`), mỗi 2–3 cảnh có 1 cảnh ảnh/`image` hoặc `kinetic` để giữ nhịp; ảnh trong bài dùng lại được với `motion` khác.
    - Không bịa số; mọi số phải có trong bài. So sánh phải cùng chuẩn. Tin xung đột/thảm họa: trung lập, ghi nguồn phát ngôn, `bgm_mood: somber`.
    - **Không đọc tên báo/nguồn trong lời đọc** (bỏ hẳn câu kiểu "Nguồn VnExpress", "Theo CafeF" ở cuối clip — người dùng yêu cầu). Nguồn chỉ hiện bằng chữ: góc trên phải tự ghi `Nguồn: <source_name>`, có thể thêm `footer` ở cảnh cuối. Câu cuối kết bằng ý chính/tác động của tin. (Ghi người phát ngôn khi trích dẫn vẫn giữ.)
@@ -53,10 +51,8 @@ Kết quả: `out/<slug>.mp4` (1080×1920, 30fps, có giọng + nhạc + SFX) + 
   "top_left": "TIN XE · 06/10/2026",
   "source_name": "CafeF",
   "handle": "@kenh_cua_ban",
-  "accent": "#4ade80",
-  "voice": "Ngọc Huyền",
-  "karaoke": "#facc15",
-  "theme": "purple",
+  "accent": "#fb923c",
+  "voice": "Hải Đăng",
   "duration_range": [45, 50],
   "voice_speed": 1.1,
   "pronounce": {"TP HCM": "Thành phố Hồ Chí Minh", "UBND": "Ủy ban nhân dân", "ha": "héc-ta", "VnExpress": "Vi-en Ếch-prét", "Soluto": "Xô-lu-tô", "Thaco": "Tha-cô", "Deluxe": "Đi-lắc", "MT": "em-tê", "Vios": "Vi-ốt", "Accent": "Ắc-xen", "Attrage": "Át-tra", "CafeF": "Ca-phê ép"},
@@ -66,9 +62,7 @@ Kết quả: `out/<slug>.mp4` (1080×1920, 30fps, có giọng + nhạc + SFX) + 
 }
 ```
 - `duration_range`: khung độ dài — skill này dùng **[45, 50]**, bắt buộc ghi trong brief (engine mặc định 30–35 nếu thiếu). Sau khi tạo giọng, nếu video dài hơn khung → build **DỪNG** và báo số âm tiết cần cắt → rút gọn `scenes.json`, chạy lại (chỉ câu đổi mới tạo lại giọng). **Không bao giờ tăng tốc giọng để ép thời lượng** — `voice_speed` giữ 1.1 theo người dùng chọn. `--force` bỏ qua giới hạn khi người dùng đồng ý video dài hơn.
-- `voice`: giọng VieNeu — **mặc định Ngọc Huyền (nữ Bắc, người dùng chọn)**. 6 giọng nữ Bắc của model mặc định (v3 turbo): Mai Anh (tin tức), Trúc Ly (tự nhiên), Ngọc Huyền (tự nhiên), Ngọc Linh (kể chuyện), Đoan Trang (tự nhiên), Quỳnh Anh (đọc truyện). Tốc độ ước tính ở 1.1x (đo trên câu mẫu ngắn): Mai Anh ≈4,7 âm tiết/s, Trúc Ly ≈5,9, Ngọc Huyền ≈5,3, Ngọc Linh ≈5,2, Đoan Trang ≈4,9, Quỳnh Anh ≈4,9 — sau video đầu, nếu thời lượng thực lệch thì ghi `"tts_rate"` đo thật vào brief. Bỏ `voice` → không tạo giọng, dùng `speech_rate` ước lượng + giao `.srt` để tạo giọng ở CapCut.
-- `theme`: **bắt buộc `"purple"`** cho skill này (nền tím than, accent xanh lá, karaoke vàng). Thiếu → nền navy như bản gốc.
-- `karaoke`: màu chữ đang đọc trong phụ đề, mặc định vàng `#facc15` (tách riêng khỏi `accent` — accent xanh lá dùng cho chữ nhấn mạnh, số, eyebrow, viền).
+- `voice`: giọng VieNeu — **mặc định Hải Đăng (nam Bắc, người dùng chọn)**. 25 giọng; giọng Bắc: Adam bựa, Trúc Ly, Thiện Minh, Mai Anh, Hải Đăng, Thiền Tâm Đức, Ngọc Huyền, Minh Đức, Phạm Tuyên, Xuân Vĩnh, Thanh Bình, Ngọc Linh, Đoan Trang, Quỳnh Anh, Quốc Tuấn. Tốc độ đo ở 1.1x: Hải Đăng ≈5,8 âm tiết/s, Minh Đức ≈4,4. Bỏ `voice` → không tạo giọng, dùng `speech_rate` ước lượng + giao `.srt` để tạo giọng ở CapCut.
 - `voice_speed`: 1.1 = nhanh 10% (giữ cao độ). Khoảng lặng đầu/cuối câu tự cắt.
 - `pronounce`: chỉ đổi cách ĐỌC, phụ đề giữ nguyên chữ. Kiểm tra cách đọc: `~/vn/bin/python -c "from vieneu_utils.phonemize_text import phonemize_text_with_emotions as P; print(P('kia soluto'))"` — từ bị phiên âm kiểu tiếng Anh sai → thêm phiên âm Việt. "Kia" đã ra 1 âm tiết /kiə/; nếu nghe vẫn như "ki-a" thì là do model, đổi chữ không giúp — tạo lại câu đó hoặc thử "xe Kia".
 
