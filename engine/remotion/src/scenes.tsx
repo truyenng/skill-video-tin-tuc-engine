@@ -62,7 +62,7 @@ export const Scene: React.FC<{s: S; dur: number}> = ({s, dur}) => {
     body = <>
       <Pop d={b0}><div style={{display: 'flex', alignItems: 'flex-end', gap: 24}}>
         {s.pre && <div style={{fontSize: 56, fontWeight: 800, color: C.mut, paddingBottom: 36}}>{s.pre}</div>}
-        <div style={{fontSize: s.image ? 220 : 260, fontWeight: 900, lineHeight: .95, letterSpacing: -8, color: 'var(--acc)'}}>{s.prefix}<Counter from={s.from ?? 0} to={s.number} d={b0} /></div>
+        <div style={{fontSize: s.image ? 220 : 260, fontWeight: 900, lineHeight: .95, letterSpacing: -8, color: 'var(--acc)'}}>{s.prefix}{typeof s.number === 'string' ? <Num v={s.number} d={b0} /> : <Counter from={s.from ?? 0} to={s.number} d={b0} />}</div>
       </div></Pop>
       {s.unit && <Words text={s.unit} d={b0 + 8} />}
     </>;
@@ -75,7 +75,7 @@ export const Scene: React.FC<{s: S; dur: number}> = ({s, dur}) => {
       </svg>
       <div style={{position: 'absolute', left: 0, right: 0, top: 50, height: 520, display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
         {s.label && <div style={{fontSize: 40, fontWeight: 800, color: C.mut}}>{s.label}</div>}
-        <div style={{fontSize: 170, fontWeight: 900, letterSpacing: -6, lineHeight: 1, color: 'var(--acc)'}}>{s.prefix}<Counter from={s.from ?? 0} to={s.number} d={b0 + 4} />{s.suffix}</div>
+        <div style={{fontSize: 170, fontWeight: 900, letterSpacing: -6, lineHeight: 1, color: 'var(--acc)'}}>{s.prefix}{typeof s.number === 'string' ? <Num v={s.number} d={b0 + 4} /> : <Counter from={s.from ?? 0} to={s.number} d={b0 + 4} />}{s.suffix}</div>
         {s.unit && <div style={{fontSize: 40, fontWeight: 800, marginTop: 8, maxWidth: 360, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.2}}>{s.unit}</div>}
       </div>
     </Card></Pop>;
