@@ -6,6 +6,7 @@ import '@fontsource/be-vietnam-pro/800.css';
 import '@fontsource/be-vietnam-pro/900.css';
 import {C, clamp, appear, pop, EASE} from './ui';
 import {Scene} from './scenes';
+import {Thumb} from './thumb';
 
 const OV = 8;
 const THEMES: Record<string, any> = {
@@ -55,11 +56,15 @@ const Subs: React.FC<{subs: any[]; fps: number}> = ({subs, fps}) => {
   </div>;
 };
 
+const themeStyle = (B: any): any => ({fontFamily: '"Be Vietnam Pro", Inter, sans-serif', color: C.txt, ...((th: any) => ({'--acc': B.accent || th.acc, '--kara': B.karaoke || th.kara || B.accent || th.acc, '--bg': th.bg, '--orb2': th.orb2, '--subbg': th.subbg, '--card': th.card, '--shade': th.shade, '--bardark': th.bardark}))(THEMES[B.theme] || THEMES.navy)});
+
+export const ThumbMain: React.FC<any> = ({brief: B = {}, thumb = {}}) => <AbsoluteFill style={themeStyle(B)}><Thumb t={thumb} brief={B} /></AbsoluteFill>;
+
 export const Main: React.FC<any> = (props) => {
   const {brief: B = {}, scenes = [], timeline = {scenes: [], subs: []}} = props;
   const f = useCurrentFrame(); const {fps} = useVideoConfig(); const t = f / fps;
   const TL = timeline.scenes;
-  return <AbsoluteFill style={{fontFamily: '"Be Vietnam Pro", Inter, sans-serif', color: C.txt, ...((th) => ({'--acc': B.accent || th.acc, '--kara': B.karaoke || th.kara || B.accent || th.acc, '--bg': th.bg, '--orb2': th.orb2, '--subbg': th.subbg, '--card': th.card, '--shade': th.shade, '--bardark': th.bardark}))(THEMES[B.theme] || THEMES.navy) as any}}>
+  return <AbsoluteFill style={themeStyle(B)}>
     <Background />
     {scenes.map((s: any, i: number) => { const st = Math.round(TL[i].start * fps), en = Math.round(TL[i].end * fps); const from = Math.max(0, st - (i ? OV : 0)); const last = i === scenes.length - 1;
       return <Sequence key={i} from={from} durationInFrames={en - from + (last ? fps : OV)}>
@@ -78,6 +83,9 @@ export const Main: React.FC<any> = (props) => {
   </AbsoluteFill>;
 };
 
-export const Root: React.FC = () => <Composition id="Main" component={Main} fps={30} width={1080} height={1920} durationInFrames={300}
+export const Root: React.FC = () => <>
+  <Composition id="Thumb" component={ThumbMain} fps={30} width={1080} height={1920} durationInFrames={1} defaultProps={{brief: {}, thumb: {}}} />
+  <Composition id="Main" component={Main} fps={30} width={1080} height={1920} durationInFrames={300}
   defaultProps={{brief: {}, scenes: [], timeline: {scenes: [], subs: []}, duration: 10}}
-  calculateMetadata={({props}: any) => ({durationInFrames: Math.max(30, Math.ceil((props.duration || 10) * 30))})} />;
+  calculateMetadata={({props}: any) => ({durationInFrames: Math.max(30, Math.ceil((props.duration || 10) * 30))})} />
+</>;

@@ -101,3 +101,18 @@ Chung: `type`, `narration` (bắt buộc), `eyebrow`, `title`, `image` + `image_
 | Tốc độ giọng / giọng khác | `voice_speed` / `voice` | build |
 | Đọc sai tên riêng | `pronounce` | build |
 | Hiệu ứng, layout | `engine/remotion/src/*.tsx` (sửa xong thì commit lên repo engine để giữ cho lần sau) | preview → build |
+
+## Thumbnail (ảnh thu nhỏ) — BẮT BUỘC mỗi video
+
+Build đầy đủ tự xuất `out/<slug>-thumbnail.jpg` (1080×1920, cùng theme/font video). Làm riêng/sửa nhanh: `python3 engine/build_remotion.py <slug> --thumb` (không tốn TTS/render video). Giao thumbnail cùng MP4.
+Viết trường `thumbnail` trong `brief.json` (thiếu → engine tự lấy số ở cảnh đầu, kém hấp dẫn hơn):
+```json
+"thumbnail": {"badge": "MƯA LỚN MIỀN TRUNG", "number": 568, "unit": "mm",
+  "title": "Huế mưa như trút **chỉ trong 8 tiếng**", "sub": "Còn mưa to đến hết đêm 11/11",
+  "image": "media/article-1.jpg", "image_credit": "Ảnh: Tiền Phong", "tag": "", "image_pos": "50% 40%"}
+```
+- `number` + `unit`: con số SỐC NHẤT của bài (số lớn, kỷ lục, tăng/giảm mạnh, giá) — hiện cỡ khổng lồ, tự co theo độ dài. Chỉ dùng số có trong bài.
+- `title`: tin hot nhất trong ≤ 8 từ, nói rõ ai/ở đâu + điều gì xảy ra; `**cụm**` = tô nền vàng cho ý gây tò mò/ấn tượng nhất (chỉ 1 cụm). Không giật tít sai sự thật, không thêm ý ngoài bài.
+- `sub`: 1 dòng ngắn (≤ 7 từ) bổ sung tác động/bối cảnh. `badge`: chủ đề ngắn. `tag` (tùy chọn, nền đỏ): "NÓNG", "MỚI"… chỉ khi đúng là tin nóng.
+- `image`: ảnh bài gốc đẹp, rõ chủ thể nhất (bắt buộc có ảnh nếu bài có ảnh); `image_pos` chỉnh vùng ảnh hiển thị.
+- Chữ chính nằm trong vùng giữa (y≈470–1590) để vẫn đọc được khi feed cắt 1:1/4:5. Read ảnh thumbnail để kiểm tra không tràn chữ trước khi giao.

@@ -7,3 +7,4 @@ Engine dùng chung cho các skill `tin-30s-nam`, `tin-45s-nam`, `tin-60s-nam` v�
 - Theme: `"theme": "navy"` (mặc định, accent cam) hoặc `"purple"` (nền tím than, accent xanh lá, karaoke vàng) trong brief.json
 - `engine/scan_news.py` — quét trang chuyên mục BĐS các báo, xuất danh sách ứng viên gọn (TSV), bỏ link đã có (`--seen`); dùng cho task quét tin hằng ngày
 - `engine/fetch_article.py` — tải bài + ảnh; tự ghép ảnh thành `media/contact.jpg` (có số) để chỉ xem 1 lần
+- Thumbnail: build tự xuất `out/<slug>-thumbnail.jpg` (khung Remotion `Thumb`, `src/thumb.tsx`); `--thumb` chỉ làm thumbnail; nội dung lấy từ `thumbnail` trong brief.json

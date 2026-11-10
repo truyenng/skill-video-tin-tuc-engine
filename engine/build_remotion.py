@@ -1,19 +1,51 @@
 #!/usr/bin/env python3
 """Dựng video tin tức dọc 9:16 bằng REMOTION từ <project>/brief.json + scenes.json.
-Dùng:  python3 build_remotion.py <project> [--check] [--preview] [--force] [--rate 4.2]
+Dùng:  python3 build_remotion.py <project> [--check] [--preview] [--thumb] [--force] [--rate 4.2]
+  --thumb: chỉ làm ảnh thumbnail out/<slug>-thumbnail.jpg (build đầy đủ cũng tự làm sau khi xong video).
 Cần: node + remotion/ (npm install xong), ffmpeg, numpy, pillow; giọng: venv VieNeu (VIENEU_PY)."""
 import json, re, sys, os, subprocess, argparse, wave
 import numpy as np
 
 ap = argparse.ArgumentParser()
-ap.add_argument('project'); ap.add_argument('--preview', action='store_true'); ap.add_argument('--check', action='store_true'); ap.add_argument('--force', action='store_true')
+ap.add_argument('project'); ap.add_argument('--preview', action='store_true'); ap.add_argument('--check', action='store_true'); ap.add_argument('--force', action='store_true'); ap.add_argument('--thumb', action='store_true')
 ap.add_argument('--rate', type=float, default=None); ap.add_argument('--fps', type=int, default=30)
 a = ap.parse_args()
 P = os.path.abspath(a.project); HERE = os.path.dirname(os.path.abspath(__file__))
 brief = json.load(open(f'{P}/brief.json', encoding='utf-8'))
 scenes = json.load(open(f'{P}/scenes.json', encoding='utf-8'))
-RATE = a.rate or brief.get('speech_rate', 4.2)   # âm tiết/giây của giọng TTS
+RATE = a.rate or brief.get('speech_rate', 4.2)
+
+# ---------- Thumbnail (ảnh thu nhỏ 1080x1920) ----------
+def make_thumb():
+    import shutil
+    from PIL import Image
+    t = dict(brief.get('thumbnail') or {})
+    if not t:   # dự phòng: lấy cảnh đầu có con số
+        sc = next((x for x in scenes if x.get('number') not in (None, '')), scenes[0])
+        t = {'badge': sc.get('eyebrow', ''), 'number': sc.get('number', ''), 'unit': sc.get('unit', ''),
+             'title': re.split(r'[,.]', sc.get('narration', ''))[0], 'image': sc.get('image'), 'image_credit': sc.get('image_credit', '')}
+        print('CẢNH BÁO: brief.json chưa có "thumbnail" -> thumbnail tự lấy từ cảnh đầu; nên viết tiêu đề hot riêng.')
+    if not t.get('image'):
+        sc = next((x for x in scenes if x.get('image')), None)
+        if sc: t['image'], t['image_credit'] = sc['image'], t.get('image_credit') or sc.get('image_credit', '')
+    n = t.get('number')
+    if isinstance(n, (int, float)): t['number'] = f"{n:,}".replace(',', '.') if float(n).is_integer() else str(n).replace('.', ',')
+    R = os.environ.get('REMOTION_DIR', f'{HERE}/remotion'); pub = f'{R}/public/{slug}-thumb'
+    shutil.rmtree(pub, ignore_errors=True); os.makedirs(pub, exist_ok=True)
+    img = t.get('image')
+    if img and not re.match(r'https?:', img):
+        dst = f'{pub}/{img}'; os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(f'{P}/{img}', dst); t['image'] = f'{slug}-thumb/{img}'
+    os.makedirs(f'{P}/out/thumb', exist_ok=True)
+    json.dump({'brief': brief, 'thumb': t}, open(f'{P}/out/thumb/props.json', 'w', encoding='utf-8'), ensure_ascii=False)
+    env3 = dict(os.environ, NO_PROXY='localhost,127.0.0.1', no_proxy='localhost,127.0.0.1')
+    subprocess.run(['node', f'{R}/render.mjs', f'{P}/out/thumb/props.json', f'{P}/out/thumb', '--stills=0', '--comp=Thumb'], check=True, env=env3)
+    out = f'{P}/out/{slug}-thumbnail.jpg'
+    Image.open(f'{P}/out/thumb/still_0.png').convert('RGB').save(out, quality=92)
+    print('THUMBNAIL:', out); return out
+
+   # âm tiết/giây của giọng TTS
 slug = brief.get('slug') or os.path.basename(P)
+if a.thumb: make_thumb(); sys.exit(0)
 
 # ---------- 1. Thời gian: ước lượng theo số âm tiết ----------
 def syl(s):
@@ -192,3 +224,4 @@ else:
            '-filter_complex', f"[1:a]lowpass=f=5000,aecho=0.8:0.6:120:0.25,loudnorm=I={brief.get('bgm_lufs', -24)}:TP=-2[b];[2:a]volume=0.25[x];[b][x]amix=inputs=2:normalize=0:duration=first[a]", '-map', '0:v', '-map', '[a]']
 subprocess.run(cmd + ['-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart', final], check=True)
 print('XONG:', final, '| có giọng' if voice else '| chưa có giọng (dùng file .srt để tạo giọng trong CapCut)')
+make_thumb()
